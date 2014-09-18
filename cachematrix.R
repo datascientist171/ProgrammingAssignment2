@@ -1,6 +1,4 @@
-## Put comments here that give an overall description of what your
-## functions do
-
+## cachematrix.R
 ## Caching the Inverse of a Matrix
 ## The functions compute and cache the inverse of the given matrix 
 ## so that cached value is returned when needed, avoiding costly recomputation
@@ -18,12 +16,16 @@ makeCacheMatrix <- function(x = matrix()) {
     xinverse = matrix() 
     xinverse<- NULL
     set <- function(y) {
-      x <<- y
+      ## store in the global environment
+      x <<- y     
       xinverse <<- NULL
     }
     get <- function() x
+    
+    ## store/cache inverse in global env
     setinverse <- function(inv) xinverse <<- inv
     getinverse <- function() xinverse
+    
     list(set = set, get = get,
          setinverse = setinverse,
          getinverse = getinverse)
@@ -37,14 +39,14 @@ makeCacheMatrix <- function(x = matrix()) {
 
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
-      xinverse <- x$getinverse()
+      xinverse <- x$getinverse()  ## get cached value
       if(!is.null(xinverse)) {
+          ## If cached inverse is non-null, return it
           message("Getting cached inverse matrix")
           return(xinverse)
       }
       matrix <- x$get()
-      xinverse <- solve(matrix)
-      x$setinverse(xinverse)
+      xinverse <- solve(matrix) ## compute inverse
+      x$setinverse(xinverse)    ## cache the computed inverse matrix
       xinverse
 }
